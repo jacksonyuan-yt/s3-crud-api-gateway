@@ -21,6 +21,7 @@ functions:
   s3FileUploader:
     handler: src/upload.handler
     name: s3-file-uploader
+    description: A lambda handler that uploads a file to an S3 bucket based on an API Gateway trigger.
     events:
       - http:
           path: file
@@ -33,6 +34,7 @@ functions:
   s3FileGet:
     handler: src/get.handler
     name: s3-file-get
+    description: A lambda handler that retrieves a file from an S3 bucket based on an API Gateway trigger.
     events:
       - http:
           path: file/{fileKey}
@@ -45,6 +47,7 @@ functions:
   s3FileDelete:
     handler: src/delete.handler
     name: s3-file-delete
+    description: A lambda handler that deletes a file from an S3 bucket based on an API Gateway trigger.
     events:
       - http:
           path: file/{fileKey}

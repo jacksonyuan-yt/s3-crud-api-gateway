@@ -1,0 +1,64 @@
+service: s3-file-api
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-west-1
+  apiName: ${self:service}
+  memorySize: 128 # mb
+  timeout: 10 # seconds
+  environment:
+    FILE_UPLOAD_BUCKET_NAME: ${self:custom.fileBucketName}
+
+plugins:
+  - serverless-iam-roles-per-function
+
+custom:
+  fileBucketName: s3-file-bucket-${self:provider.stage}
+
+functions:
+  s3FileUploader:
+    handler: src/upload.handler
+    name: s3-file-uploader
+    events:
+      - http:
+          path: file
+          method: POST
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:Put*"
+        Resource: arn:aws:s3:::${self:custom.fileBucketName}/*
+  s3FileGet:
+    handler: src/get.handler
+    name: s3-file-get
+    events:
+      - http:
+          path: file/{fileKey}
+          method: GET
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:Get*"
+        Resource: arn:aws:s3:::${self:custom.fileBucketName}/*
+  s3FileDelete:
+    handler: src/delete.handler
+    name: s3-file-delete
+    events:
+      - http:
+          path: file/{fileKey}
+          method: DELETE
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "s3:DeleteObject"
+        Resource: arn:aws:s3:::${self:custom.fileBucketName}/*
+
+resources:
+  Resources:
+    FileBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.fileBucketName}
+        AccessControl: Private

@@ -1,0 +1,15 @@
+{
+  "name": "s3-crud-api-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Jackson Yuan",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.897.0",
+    "serverless-iam-roles-per-function": "^3.1.0"
+  }
+}
